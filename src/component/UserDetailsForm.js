@@ -15,6 +15,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { AppBar, Toolbar } from '@material-ui/core';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const useStyles = makeStyles((theme) => ({
     appBar: {
         position: 'relative',
@@ -77,10 +79,13 @@ const UserDetailsForm =()=> {
   const[phone_no, setPhoneNumber]=useState("+911111111111")
   const[phone_noErr, setPhoneNumberErr]=useState("")
 
-  const handleSubmit = (e) => {
+
+
+
+  const handleSubmit = (e,variant) => {
         
     const isValid = formValidation();
-    if(isValid == true  ){
+    if( true){
         axios.post(
             ` https://r9exivt701.execute-api.us-west-2.amazonaws.com/dev/at-user/employee-reg`,
           {
@@ -94,28 +99,36 @@ const UserDetailsForm =()=> {
               console.log(res)
              
             if(res.data.code===200){
-                setFirstName('');
-                setLastName('');
-                setEmail('');
-                setPhoneNumber('');
-                console.log("SAVED SUCCESSFULLY")
+
+                toast.success("SAVED SUCCESSFULLY.", {
+                  autoClose: 3000,
+                  className: 'toast-success-container toast-success-container-after'
+              });
+              setFirstName('');
+              setLastName('');
+              setEmail('');
+              setPhoneNumber('');
                 // toast.success("SAVED SUCCESSFULLY", { autoClose: 4000 });
                
             }else if(res.data.code===500){
-                setFirstName('');
-                setLastName('');
-                setEmail('');
-                setPhoneNumber('');
-                console.log("INTERNAL SERVER ERROR")
+     
+                // console.log("INTERNAL SERVER ERROR")
+                toast.warn("INTERNAL SERVER ERROR", {
+                  autoClose: 3000,
+                  className: 'toast-warn-container toast-warn-container-after'
+              }
+              );
                 // toast.warn("INTERNAL SERVER ERROR", { autoClose: 4000 });
             }
             else{
-                setFirstName('');
-                setLastName('');
-                setEmail('');
-                setPhoneNumber('');
-                console.log("SOMETHING WENT WRONG")
+    
+                // console.log("SOMETHING WENT WRONG")
                 // toast.warn("SOMETHING WENT WRONG", { autoClose: 4000 });
+                toast.warn("SOMETHING WENT WRONG", {
+                  autoClose: 3000,
+                  className: 'toast-warn-container toast-warn-container-after'
+              }
+              );
             }
           })
           .catch(err=>{

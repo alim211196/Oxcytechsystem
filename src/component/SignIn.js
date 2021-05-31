@@ -9,7 +9,7 @@ import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
-import UserPool from '../UserPool';
+import signIn from '../UserPool';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -71,14 +71,16 @@ const SignIn =() =>{
 
     const onSubmit =(event)=>{
     event.preventDefault();
-    UserPool.signUp(username,password,[],null,(err,data)=>{
-      if(err){
-        console.error(err);
-      }
-      else{
-        console.log(data);
-      }
-    })
+    signIn(username,password);
+
+    // UserPool.signUp(username,password,[],null,(err,data)=>{
+    //   if(err){
+    //     console.error(err);
+    //   }
+    //   else{
+    //     console.log(data);
+    //   }
+    // })
   }
   return (
     <Grid container component="main" className={classes.root}>
@@ -121,9 +123,9 @@ const SignIn =() =>{
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
-                  <Link href='/CreateForm'>
+           
             <Button
-          // onClick={onSubmit}
+           onClick={onSubmit}
               fullWidth
               variant="contained"
               color="primary"
@@ -131,7 +133,7 @@ const SignIn =() =>{
             >
               Sign In
             </Button>
-            </Link>
+           
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2" className={classes.backgroundColor}>

@@ -1,45 +1,44 @@
-
 import {
+	AuthenticationDetails,
+	CognitoUser,
 	CognitoUserPool,
 	CognitoUserAttribute,
-	CognitoUser,
-} from 'amazon-cognito-identity-js';
-var AmazonCognitoIdentity = require('amazon-cognito-identity-js');
-var poolData = {
-	UserPoolId: 'us-west-2_AigFhw7S7',
-	ClientId: '68k34c01spn152t4ho22g60i6e', 
-};
-var userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+  } from "amazon-cognito-identity-js";
+  import axios from "axios"
+  const signIn = (username, password) => {
+   
+	let cognitoUser = new CognitoUser({
+	  Username: username,
+	  Pool: new CognitoUserPool({
+  
+		UserPoolId: 'us-west-2_AigFhw7S7',
+		ClientId: '68k34c01spn152t4ho22g60i6e',
+		
+	  }),
+	  
+	});
+   
+   
+	let authenticationData = {
+	  Username: username,
+	  Password: password,
+	};
+	return new Promise((resolve, reject) => {
+	  cognitoUser.authenticateUser(
+		new AuthenticationDetails(authenticationData),
+		{
+		  onSuccess: function (result) {
+                   console.log(result);
+				   localStorage.setItem('Token',result.getIdToken().getJwtToken())
+				   window.location = '/CreateForm'
+				   
+				},
+				onFailure: function (err) {
+					console.log('onFailure');
+  }
+})
+	})
 
-var attributeList = [];
 
-var dataUsername = {
-	Name: 'username',
-	Value: 'admin',
-};
-
-var dataPassWord = {
-	Name: 'password',
-	Value: 'admin123',
-};
-var attributeUsername = new AmazonCognitoIdentity.CognitoUserAttribute(dataUsername);
-var attributePassword = new AmazonCognitoIdentity.CognitoUserAttribute(
-	dataPassWord
-);
-
-attributeList.push(attributeUsername);
-attributeList.push(attributePassword);
-
-userPool.signUp('username', 'password', attributeList, null, function(
-	err,
-	result
-) {
-	if (err) {
-		alert(err.message || JSON.stringify(err));
-		return;
-	}
-	var cognitoUser = result.user;
-	console.log('user name is ' + cognitoUser.getUsername());
-});
-
-export default new CognitoUserPool(poolData);
+}
+export default signIn
